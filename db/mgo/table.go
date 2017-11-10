@@ -48,11 +48,16 @@ func (t *Table) ReadAll(ptr interface{}) error {
 	return t.UnsafeReadMany(bson.M{"dtime": 0}, ptr)
 }
 
-func (t *Table) ReadMany(key string, values []string, ptr interface{}) error {
+func (t *Table) ReadManyIn(key string, values []string, ptr interface{}) error {
 	return t.UnsafeReadMany(bson.M{"dtime": 0, key: bson.M{"$in": values}}, ptr)
 }
 
-func (t *Table) ReadOne(where interface{}, ptr interface{}) error {
+func (t *Table) ReadMany(where M, ptr interface{}) error {
+	where["dtime"] = 0
+	return t.UnsafeReadMany(where, ptr)
+}
+
+func (t *Table) ReadOne(where M, ptr interface{}) error {
 	return t.UnsafeReadOne(where, ptr)
 }
 
@@ -60,7 +65,7 @@ func (t *Table) ReadByID(id string, ptr interface{}) error {
 	return t.UnsafeGetByID(id, ptr)
 }
 
-func (t *Table) NotExist(where map[string]interface{}) error {
+func (t *Table) NotExist(where M) error {
 	where["dtime"] = 0
 	var c, err = t.UnsafeTable.UnsafeCount(where)
 	if err != nil {

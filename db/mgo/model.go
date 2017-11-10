@@ -14,9 +14,9 @@ type IModel interface {
 }
 
 type BaseModel struct {
-	ID    string `bson:"_id" json:"id"`      //
-	MTime int64  `bson:"mtime" json:"mtime"` //Modify Time
-	DTime int64  `bson:"dtime" json:"dtime"` //Delete Time
+	ID    string `bson:"_id,omitempty" json:"id,omitempty"`      //
+	MTime int64  `bson:"mtime,omitempty" json:"mtime,omitempty"` //Modify Time
+	DTime int64  `bson:"dtime" json:"dtime"`                     //Delete Time
 }
 
 func (b *BaseModel) GetID() string {

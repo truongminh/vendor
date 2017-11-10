@@ -78,6 +78,7 @@ func (db *Database) reconnect() {
 		mongoDBLog.Errorf("connect to %v error %v", db.url, err.Error())
 	} else {
 		mongoDBLog.Infof(0, "connected to %v", db.url)
+		session.SetSocketTimeout(time.Minute * 2)
 		db.Database = session.DB(db.name)
 		db.connected.Emit(struct{}{})
 		for col, indecies := range db.indexes {
@@ -100,6 +101,8 @@ func (db *Database) keepAlive() {
 	if err != nil {
 		mongoDBLog.Errorf("disconnected from %s", db.url)
 		db.err = errDBClosed
+	} else {
+		mongoDBLog.Debugf(0, "ping %s success", db.url)
 	}
 }
 
