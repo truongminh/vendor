@@ -50,3 +50,31 @@ func timeToDay(ctime int64) string {
 	var t = time.Unix(ctime, 0)
 	return t.Format("2006-01-02")
 }
+
+type Day struct {
+	t time.Time
+}
+
+func NewDay(t time.Time) Day {
+	return Day{t}
+}
+
+func DayStart(t time.Time) time.Time {
+	yy, mm, dd := t.Date()
+	t = time.Date(yy, mm, dd, 0, 0, 0, 0, t.Location())
+	return t
+}
+
+const dayFormat = "2006-01-02"
+
+func (d Day) String() string {
+	return d.t.Format(dayFormat)
+}
+
+func (d Day) Begin() time.Time {
+	return d.t
+}
+
+func (d Day) End() time.Time {
+	return d.Begin().Add(time.Hour*24 - 1)
+}
