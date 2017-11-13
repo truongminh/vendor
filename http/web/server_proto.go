@@ -53,6 +53,14 @@ func (s *JsonServer) Success(w http.ResponseWriter) {
 	s.SendData(w, nil)
 }
 
+func (s *JsonServer) Send(w http.ResponseWriter, data interface{}, err ...error) {
+	if err != nil && len(err) > 0 && err[0] != nil {
+		s.SendError(w, err[0])
+		return
+	}
+	s.SendData(w, data)
+}
+
 func (s *JsonServer) DecodeBody(r *http.Request, v interface{}) error {
 	if err := json.NewDecoder(r.Body).Decode(v); err != nil {
 		return BadRequest(err.Error())
