@@ -38,3 +38,7 @@ func (c *WsClient) WriteError(err error) {
 func (c *WsClient) WriteJson(uri string, v interface{}) {
 	c.queueForSend(BuildJsonMessage(uri, v))
 }
+
+func (c *WsClient) WriteRaw(msg []byte) {
+	c.queueForSend(msg)
+}

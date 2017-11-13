@@ -9,7 +9,7 @@ import (
 )
 
 type Request struct {
-	Payload []byte
+	Payload []byte // RawURI Data
 	RawURI  string
 	URI     *url.URL
 	Data    []byte
@@ -54,7 +54,11 @@ func (r *Request) String() string {
 	return fmt.Sprintf("url: [%s], data: [%s]\n", r.RawURI, r.Data)
 }
 
-func (r *Request) Reply(v interface{}) {
+func (r *Request) Reply(v interface{}, err ...error) {
+	if err != nil && len(err) > 0 && err[0] != nil {
+		r.ReplyError(err[0])
+		return
+	}
 	r.Client.WriteJson(r.RawURI, v)
 }
 
